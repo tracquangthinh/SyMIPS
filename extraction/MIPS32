@@ -1,0 +1,303 @@
+ADD rd, rs, rt MIPS32
+temp ← (rs[31]||rs[31..0]) + (rt[31]||rt[31..0])
+if temp[32] ≠ temp[31] then
+   SignalException(IntegerOverflow)
+else
+   rd ← sign_extend(temp[31..0])
+endif
+
+ADDI rt, rs, immediate MIPS32
+temp ← (rs[31]||rs[31..0]) + sign_extend(immediate)
+if temp32 ≠ temp31 then
+    SignalException(IntegerOverflow)
+else
+    rt ← temp
+endif
+
+ADDIU rt, rs, immediate MIPS32
+temp ← rs + sign_extend(immediate)
+rt ← temp
+
+ADDU rd, rs, rt MIPS32
+temp ← rs + rt
+rd ← temp
+
+ANDI rt, rs, immediate MIPS32
+rt ← rs and zero_extend(immediate)
+
+BREAK MIPS32
+SignalException(Breakpoint)
+
+CLO rd, rs MIPS32
+temp ← 32
+for i in 31..0
+    if rs_i = 0 then
+        temp ← 31 - i
+        break
+    endif
+endfor
+rd ← temp
+
+CLZ rd, rs MIPS32
+temp ← 32
+for i in 31..0
+    if rs_i = 1 then
+        temp ← 31 - i
+        break
+    endif
+endfor
+rd ← temp
+
+DIV rs, rt MIPS32
+q ← rs[31..0] div rt[31..0]
+LO ← sign_extend(q[31..0])
+r ← rs[31..0] mod rt[31..0]
+HI ← sign_extend(r[31..0])
+
+DIVU rs, rt MIPS32
+q ← (0 || rs[31..0]) div (0 || rt[31..0])
+r ← (0 || rs[31..0]) mod (0 || rt[31..0])
+LO ← sign_extend(q[31..0])
+HI ← sign_extend(r[31..0])
+
+EXT rt, rs, pos, size MIPS32
+msbd ← size-1
+lsb ← pos
+temp ← 0^(32-(msbd+1)) || rs[msbd+lsb..lsb]
+rt ← temp
+
+INS rt, rs, pos, size MIPS32
+msb ← pos+size-1
+lsb ← pos
+rt ← rt[31..msb+1] || rt[msb-lsb..0] || rt[lsb-1..0]
+
+LUI rt, immediate MIPS32
+rt ← sign_extend(immediate || 0^16)
+
+MADD rs, rt MIPS32
+temp ← (HI[31..0] || LO[31..0]) + (rs[31..0] × rt[31..0])
+HI ← sign_extend(temp[63..32])
+LO ← sign_extend(temp[31..0])
+
+MADDU rs, rt MIPS32
+temp ← (HI[31..0] || LO[31..0]) + ((0^32 || rs[31..0]) × (0^32 || rt[31..0]))
+HI ← sign_extend(temp[63..32])
+LO ← sign_extend(temp[31..0])
+
+MFHI rd MIPS32
+rd ← HI
+
+MFLO rd MIPS32
+rd ← LO
+
+MOVN rd, rs, rt MIPS32
+if rt ≠ 0 then
+    rd ← rs
+endif
+
+MovzZ rd, rs, rt MIPS32
+if rt = 0 then
+    rd ← rs
+endif
+
+MSUB rs, rt MIPS32
+temp ← (HI[31..0] || LO[31..0]) - (rs[31..0] × rt[31..0])
+HI ← sign_extend(temp[63..32])
+LO ← sign_extend(temp[31..0]
+
+MSUBU rs, rt MIPS32
+temp ← (HI[31..0] || LO[31..0]) - ((0^32 || rs[31..0]) × (0^32 || rt[31..0]))
+HI ← sign_extend(temp[63..32])
+LO ← sign_extend(temp[31..0])
+
+MTHI rs MIPS32
+HI ← rs
+
+MTLO rs MIPS32
+LO ← rs
+
+MUL rd, rs, rt MIPS32
+temp <- rs * rt
+rd <- sign_extend(temp[31..0])
+HI <- UNPREDICTABLE()
+LO <- UNPREDICTABLE()
+
+MULT rs, rt MIPS32
+prod ← rs[31..0] × rt[31..0]
+LO	← sign_extend(prod[31..0])
+HI	← sign_extend(prod[63..32])
+
+MULTU rs, rt MIPS32
+prod← (0 || rs[31..0]) × (0 || rt[31..0])
+LO ← sign_extend(prod[31..0])
+HI ← sign_extend(prod[63..32]
+
+NOR rd, rs, rt MIPS32
+rd ← rs nor rt
+
+OR rd, rs, rt MIPS32
+rd ← rs or rt
+
+ORI rt, rs, immediate MIPS32
+rt ← rs or zero_extend(immediate)
+
+ROTR rd, rt, s MIPS32
+s ← sa
+temp ← rt[s-1..0] || rt[31..s]
+rd ← sign_extend(temp)
+
+ROTRV rd, rt, rs MIPS32
+s ← rs[4..0]
+temp ← rt[s-1..0] || rt[31..s]
+rd ← temp
+
+SEB rd, rt MIPS32 
+rd ← sign_extend(rt[7..0])
+
+SEH rd, rt MIPS32 
+rd ← sign_extend(rt[15..0])
+
+SLL rd, rt, sa MIPS32
+s ← sa
+temp ← rt[31-s..0] || 0^s
+rd ← sign_extend(temp)
+
+SLLV rd, rt, rs MIPS32
+s ← rs[4..0]
+temp ← rt[31-s..0] || 0^s
+rd← sign_extend(temp)
+
+SLT rd, rs, rt MIPS32
+if rs < rt then
+    rd ← 0^(GPRLEN-1) || 1
+else
+    rd ← 0^GPRLEN
+endif
+
+SLTI rt, rs, immediate MIPS32
+if rs < sign_extend(immediate) then
+    rt ← 0^(GPRLEN-1) || 1
+else
+    rt ← 0^GPRLEN
+endif
+
+SLTIU rt, rs, immediate MIPS32
+if (0 || rs) < (0 || sign_extend(immediate)) then
+    rt ← 0^(GPRLEN-1) || 1
+else
+    rt ← 0^GPRLEN
+endif
+
+SLTU rd, rs, rt MIPS32
+if (0 || rs) < (0 || rt) then
+    rd ← 0^GPRLEN-1 || 1
+else
+    rd ← 0^GPRLEN
+endif
+
+SRA rd, rt, sa MIPS32
+s ← sa
+temp ← (rt[31])^s || rt[31..s]
+rd ← sign_extend(temp)
+
+SRAV rd, rt, rs MIPS32
+s ← rs[4..0]
+temp ← (rt[31])^s || rt[31..s]
+rd ← sign_extend(temp)
+
+SRL rd, rt, sa MIPS32
+s ← sa
+temp ← 0^s || rt[31..s]
+rd ← sign_extend(temp)
+
+SRLV rd, rt, rs MIPS32
+s ← rs[4..0]
+temp ← 0^s || rt[31..s]
+rd← sign_extend(temp)
+
+SSNOP MIPS32
+None
+
+NOP MIPS32
+None
+
+SUB rd, rs, rt MIPS32
+temp ← (rs_31||rs[31..0]) − (rt_31||rt[31..0])
+if temp_32 ≠ temp_31 then
+    SignalException(IntegerOverflow)
+else
+    rd ← sign_extend(temp[31..0])
+endif
+
+SUBU rd, rs, rt MIPS32
+temp ← rs - rt
+rd← sign_extend(temp)
+
+TEQ rs, rt MIPS32
+if rs = rt then
+    SignalException(Trap)
+endif
+
+TEQI rs, immediate MIPS32
+if rs = sign_extend(immediate) then
+        SignalException(Trap)
+endif
+
+TGE rs, rt MIPS32
+if rs ≥ rt then
+    SignalException(Trap)
+endif
+
+TGEI rs, immediate MIPS32
+if rs ≥ sign_extend(immediate) then
+    SignalException(Trap)
+endif
+
+TGEIU rs, immediate MIPS32
+if (0 || rs) ≥ (0 || sign_extend(immediate)) then
+    SignalException(Trap)
+endif
+
+TGEU rs, rt MIPS32
+if (0 || rs) ≥ (0 || rt) then
+    SignalException(Trap)
+endif
+
+TLT rs, rt MIPS32
+if rs < rt then
+    SignalException(Trap)
+endif
+
+TLTI rs, immediate MIPS32
+if rs < sign_extend(immediate) then
+    SignalException(Trap)
+endif
+
+TLTIU rs, immediate MIPS32
+if (0 || rs) < (0 || sign_extend(immediate)) then
+    SignalException(Trap)
+endif
+
+TLTU rs, rt MIPS32
+if (0 || rs) < (0 || rt) then
+    SignalException(Trap)
+endif
+
+TNE rs, rt MIPS32
+if rs ≠ rt then
+    SignalException(Trap)
+endif
+
+TNEI rs, immediate MIPS32
+if rs ≠ sign_extend(immediate) then
+    SignalException(Trap)
+endif
+
+WSBH rd, rt MIPS32 
+rd ← sign_extend(rt23..16 || rt_31..24 || rt7..0 || rt15..8)
+
+XOR rd, rs, rt MIPS32
+rd ← rs xor rt
+
+XORI rt, rs, immediate MIPS32
+rt ← rs xor zero_extend(immediate)

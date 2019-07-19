@@ -1,0 +1,3 @@
+Integer immediate=513, Character rs=v, Character rt=p,
+Integer immediate=0, Character rs=v, Character rt=0,
+Integer immediate=0, Character rs=6, Character rt=0,

@@ -1,0 +1,3 @@
+Character rs=b, Character rt=p, Character rd=0,
+Character rs=b, Character rd=p, Character rt=p,
+Character rs=b, Character rt=0, Character rd=0,

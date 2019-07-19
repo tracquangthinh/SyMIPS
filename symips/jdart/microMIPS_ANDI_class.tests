@@ -1,0 +1,3 @@
+Integer immediate=4, Character rs=n, Character rt=0,
+Integer immediate=368, Character rs=n, Character rt=i,
+Integer immediate=0, Character rs=n, Character rt=0,

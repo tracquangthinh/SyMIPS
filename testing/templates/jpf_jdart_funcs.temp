@@ -1,0 +1,10 @@
+package symips.jdart;
+import symips.emulator.base.*;
+import symips.emulator.semantics.Environment;
+public class $class {
+	public $class() {}
+$representedFuncs
+	public static void main(String[] args) {
+        $mainMethod
+    }
+}

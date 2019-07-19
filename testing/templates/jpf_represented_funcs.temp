@@ -1,0 +1,6 @@
+	public static String $methodName($fullParams) {
+		Environment env = new Environment(true);
+		String report = env.takeInstance() + " -> ";
+		new $variation(env).$funcName($shortenParams);
+		return report + env.takeInstance();
+	}

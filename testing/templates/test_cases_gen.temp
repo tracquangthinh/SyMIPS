@@ -1,0 +1,23 @@
+package symips.jdart;
+import symips.jdart.*;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+
+public class TestCasesGen {
+
+	public TestCasesGen() {}
+
+	public static void write(String path, String message) {
+		try (BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(path), StandardCharsets.UTF_8))) {
+			bw.write(message);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+$methodDeclarations
+
+	public static void main(String[] args) {
+$mainExec
+	}
+}

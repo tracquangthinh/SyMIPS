@@ -1,0 +1,4 @@
+Integer immediate=64, Character rs=j, Character rt=0,
+Integer immediate=2, Character rs=j, Character rt=0,
+Integer immediate=661, Character rs=j, Character rt=p,
+Integer immediate=0, Character rs=j, Character rt=0,

@@ -1,0 +1,10 @@
+	public static void $methodName_$testNumber() {
+		System.out.println("   + Executing $methodName_tests_$testNumber ...");
+		String[] result = $methodName.$mainMethod.split("->");
+		String dir = "symips/jdart/$methodName/";
+		String testName = "$methodName_$testNumber";
+		new File(dir).mkdirs();
+		write(dir + testName + ".inp", result[0].trim());
+		write(dir + testName + ".out", result[1].trim());
+	}
+
