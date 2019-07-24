@@ -29,7 +29,7 @@ public class Executor{
             "bltzal", "bne", "bnel", "bnez", "beqz", "beql"};
     public static ArrayList<String> branchOpCodes = new ArrayList<String>(Arrays.asList(branchOpArray));
 
-    public static final int LOOP_LIMITATION = 500;
+    public static final int LOOP_LIMITATION = 100;
 
     public HashMap<String, Integer> jumpCounter;
 
@@ -220,8 +220,8 @@ public class Executor{
             if(currentOpcode.contains("j") || currentOpcode.equals("b") || currentOpcode.equals("bal") ||
                 currentOpcode.equals("bl")){
 
-                if(currentOpcode.charAt(currentOpcode.length()-1) == 'l'){
-                    emulator.link(currentAddress+1);
+                if(currentOpcode.charAt(currentOpcode.length()-1) == 'l' || currentOpcode.equals("jalr")){
+                    emulator.link(this.initAddress + (currentAddress+2)*4);
                 }
 
 //
@@ -231,29 +231,31 @@ public class Executor{
                     offset = Arithmetic.bitVecToLong(emulator.getEnv().value(Mapping.regStrToChar.get(params)));
                 } else {
                     offset = Arithmetic.hexToInt(params);
-                    if(offset > initAddress){
-                        offset = offset - initAddress;
-                    }
 
                 }
 
-                offset = offset / 4;
-                offset += entryPointPos;
 
-//                Logs.infoLn("- Jump: " + Arithmetic.intToHex(currentAddress) + " -> " + Arithmetic.intToHex(offset));
+                if(offset > initAddress){
+                    offset = offset - initAddress;
+                    offset = offset/4;
+                } else {
+                    offset = offset / 4;
+                    offset += entryPointPos;
+                }
 
                 newPath += "-" + String.valueOf(currentAddress);
-
-                tracing(currentAddress, (int)offset);
 
                 increaseJumpCount(currentAddress, (int) offset);
                 if(!greaterThanLoopLimit(currentAddress, (int) offset)) {
                     if(offset <= endPointPos && offset >= 0){
+                        Logs.infoLn("- Jump: " + Arithmetic.intToHex(currentAddress) + " -> " + Arithmetic.intToHex(offset));
+                        tracing(currentAddress, (int)offset);
                         currentAddress = (int) offset;
                     } else {
-                        throw new Exception("* Warning: Jump to outside. Terminate.");
+                        return null;
                     }
                 } else {
+                    Logs.infoLn("* Loop: exceed the maximum number of iterations. Terminate...");
                     return null;
                 }
 
@@ -386,6 +388,7 @@ public class Executor{
                 trueBranchFeasible = execResult.getValue();
                 truePath = execResult.getKey();
             } else {
+                Logs.infoLn("* Loop: exceed the maximum number of iterations. Terminate...");
                 trueBranchFeasible = false;
             }
 

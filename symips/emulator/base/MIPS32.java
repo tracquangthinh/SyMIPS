@@ -8,12 +8,12 @@ import symips.utils.Logs;
 public class MIPS32 extends Emulator{
 	public MIPS32(Environment env){ super(env); }
 
-	public void ADD(Character rt, Character rs, Character rd){
-		write(rt, add(val(rs), val(rd)));
+	public void ADD(Character rd, Character rs, Character rt){
+		write(rd, add(val(rs), val(rt)));
 	}
 
-	public  void ADDU(Character rt, Character rs, Character rd){
-		BitVec temp = add(val(rs), val(rd));
+	public  void ADDU(Character rd, Character rs, Character rt){
+		BitVec temp = add(val(rs), val(rt));
 		write(rd, temp);
 	}
 	public void ADDIU(Character rt, Character rs, int immediate){
@@ -472,5 +472,10 @@ public class MIPS32 extends Emulator{
 
     }
 
-
+	public static void main(String[] args){
+		Environment env = new Environment();
+		MIPS32 emu = new MIPS32(env);
+		emu.ADDIU('1', '0', (int)Arithmetic.hexToInt("-0x970"));
+		Logs.infoLn(emu.getEnv());
+	}
 }

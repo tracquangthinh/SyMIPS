@@ -149,6 +149,7 @@ public class Emulator {
         long sourceAddress = Arithmetic.bitVecToLong(env.value(p));
         sourceAddress += offset;
         write(r, env.memory.loadWord(sourceAddress));
+//        Logs.infoLn("gp = " + Arithmetic.bitVecToHex(val(Mapping.regStrToChar.get("$gp"))));
     }
 
     public void LL(Character r, Character p, int offset) {

@@ -4,6 +4,7 @@ import javafx.util.Pair;
 import symips.emulator.base.MIPS32;
 import symips.emulator.semantics.Environment;
 import symips.unit.AsmNode;
+import symips.utils.Arithmetic;
 import symips.utils.Logs;
 import symips.visualization.Graph;
 
@@ -21,6 +22,10 @@ public class SyMIPS {
             File f = new File(input);
             String fileName = f.getName();
             String path = f.getParent();
+            if(path == null){
+                Logs.infoLn("+ Please type full path of your input.");
+                System.exit(-1);
+            }
 
             Environment env = new Environment();
             MIPS32 emulator = new MIPS32(env);
@@ -29,15 +34,20 @@ public class SyMIPS {
             long initAddress = -1;
             ArrayList<AsmNode> nodes = null;
             boolean failed_format = false;
+            BinParser parser = new BinParser(input);
             try{
-                nodes = BinParser.parse(input);
+                parser.loadELF();
+                nodes = parser.parse();
                 endPoint = nodes.size();
+                HashMap otherSections = parser.getOtherSections();
+                env.loadOtherSections(otherSections);
             } catch (Throwable e){
+                Logs.infoLn(e);
                 failed_format = true;
             }
 
             if(!failed_format) {
-                initAddress = BinParser.getInitAddress(input);
+                initAddress = parser.getInitAddress();
                 Executor executor = new Executor();
                 executor.setAddress(initAddress, entryPoint, endPoint);
 

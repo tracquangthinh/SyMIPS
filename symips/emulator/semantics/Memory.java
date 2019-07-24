@@ -34,10 +34,6 @@ public class Memory {
     }
 
     public BitVec loadByte(long address){
-//        if(address < STARTADDRESS){
-//            Logs.info("Error: loadByte - Invalid address");
-//            return null;
-//        }
         String key = Arithmetic.intToHex(address);
         byte concreteValue = memory.containsKey(key) ? memory.get(key).byteValue() : 0;
         String symbolicValue = byteSymbolicMemory.containsKey(key)? byteSymbolicMemory
@@ -48,11 +44,16 @@ public class Memory {
     }
 
     public BitVec loadWord(long address){
-        long v0 = (Arithmetic.bitVecToLong(loadByte(address+3)) & 0xff) << 24;
-        long v1 = (Arithmetic.bitVecToLong(loadByte(address+2)) & 0xff) << 16;
-        long v2 = (Arithmetic.bitVecToLong(loadByte(address+1)) & 0xff) << 8;
-        long v3 = (Arithmetic.bitVecToLong(loadByte(address)) & 0xff);
-        long v  = v0+v1+v2+v3;
+//        long v0 = (Arithmetic.bitVecToLong(loadByte(address+3)) & 0xff) << 24;
+//        long v1 = (Arithmetic.bitVecToLong(loadByte(address+2)) & 0xff) << 16;
+//        long v2 = (Arithmetic.bitVecToLong(loadByte(address+1)) & 0xff) << 8;
+//        long v3 = (Arithmetic.bitVecToLong(loadByte(address)) & 0xff);
+//        long v  = v0+v1+v2+v3;
+        long v = 0;
+        for (int i = 0; i < 4; i++)
+        {
+            v = (v << 8) + (Arithmetic.bitVecToLong(loadByte(address+i)) & 0xff);
+        }
         BitVec bitVec = Arithmetic.longToBitVec(v, Configs.architecture);
         String symbolicValue = wordSymbolicMemory.get(Arithmetic.intToHex(address));
         if(symbolicValue != null){
@@ -95,10 +96,10 @@ public class Memory {
     public void storeWord(long address , BitVec b){
         int value = (int) Arithmetic.bitVecToLong(b);
         wordSymbolicMemory.put(Arithmetic.intToHex(address), b.getSym());
-        storeByte(address  , (byte)(value));
-        storeByte(address+1, (byte)(value >>> 8 ));
-        storeByte(address+2, (byte)(value >>> 16));
-        storeByte(address+3, (byte)(value >>> 24));
+        storeByte(address  , (byte)(value>>24));
+        storeByte(address+1, (byte)(value >>> 16 ));
+        storeByte(address+2, (byte)(value >>> 8));
+        storeByte(address+3, (byte)(value));
     }
 
 

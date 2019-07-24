@@ -7,7 +7,7 @@ Until now, it supports running DSE on MIPS32 instruction set under the presence 
 
 **Note:** Currently, this version is for Linux only.
 ### Java Runtime Environment
-First, you need to install Java 1.8 or later since **SyMIPS** is almost written in Java.
+First, you need to install Java 1.8 or later since **SyMIPS** has been written in Java.
 
 ### Capstone
 
@@ -33,7 +33,7 @@ You can use a jar file **SyMIPS** or rebuild it from source code.
 ## Running SyMIPS
 
 ```
-java -jar SyMIPS.jar /fullpath/to/input/file
+java -Xss512m -Xmx3048m -jar SyMIPS.jar /full_path/to/input/file
 ```
 
 ## License

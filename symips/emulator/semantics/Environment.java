@@ -6,6 +6,7 @@ import symips.utils.Arithmetic;
 import symips.utils.Logs;
 import symips.utils.MyStr;
 
+import java.util.HashMap;
 import java.util.Random;
 
 public class Environment {
@@ -61,6 +62,17 @@ public class Environment {
                     Arithmetic.intToBitSet(rand()), Arithmetic.intToBitSet(rand()),
                     Arithmetic.intToBitSet(rand()), Arithmetic.intToBitSet(rand()));
             memory = new Memory(Configs.architecture);
+        }
+    }
+
+    public void loadOtherSections(HashMap<Long, byte[]> sections){
+        Long[] addrs = sections.keySet().toArray(new Long[sections.keySet().size()]);
+        for(int i = 0 ; i < addrs.length ; i++) {
+            Long addr = addrs[i];
+            byte[] bytes = sections.get(addr);
+            for(int j = 0 ; j < bytes.length ; j++){
+                memory.storeByte(addr + j, Arithmetic.longToBitVec(bytes[j], Configs.architecture));
+            }
         }
     }
 
